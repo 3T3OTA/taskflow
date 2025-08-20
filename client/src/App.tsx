@@ -4,6 +4,8 @@ import HomePage from "@/pages/home";
 import LoginPage from "@/pages/login";
 import RegisterPage from "@/pages/register";
 
+import DashboardPage from "@/pages/dashboard";
+
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 
@@ -19,6 +21,7 @@ function App() {
       </Route>
 
       <Route element={<ProtectedRoute />}>
+         <Route element={<DashboardPage />} path="/dashboard" />
       </Route>
     </Routes>
   );
