@@ -5,6 +5,7 @@ import LoginPage from "@/pages/login";
 import RegisterPage from "@/pages/register";
 
 import DashboardPage from "@/pages/dashboard";
+import BoardPage from "@/pages/board";
 
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
@@ -22,6 +23,7 @@ function App() {
 
       <Route element={<ProtectedRoute />}>
          <Route element={<DashboardPage />} path="/dashboard" />
+         <Route element={<BoardPage />} path="/boards/:id" />
       </Route>
     </Routes>
   );

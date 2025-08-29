@@ -56,3 +56,87 @@ export const getCurrentUser = async () => {
         throw error;
     }
 }
+
+export const getBoards = async () => {
+    try {
+        const response = await api.get('/boards/me');
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}
+
+export const createBoard = async (title: string) => {
+    try {
+        const response = await api.post('/boards/create', { title });
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}
+
+export const getBoardById = async (id: string) => {
+    try {
+        const response = await api.get(`/boards/me/${id}`);
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}
+
+export const listsOrderUpdate = async (boardId: string, listData: string[]) => {
+    try {
+        const response = await api.put(`/boards/${boardId}/lists/order`, { listData });
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}
+
+export const addListsToBoard = async (boardId: string, title: string) => {
+    try {
+        const response = await api.post(`/boards/${boardId}/list/add`, { title });
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}
+
+export const deleteListfromBoard = async (boardId: string, listId: string) => {
+    try {
+        const response = await api.delete(`/boards/${boardId}/list/${listId}`);
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}
+
+export const updateListInBoard = async (boardId: string, listId: string, title: string) => {
+    try {
+        const response = await api.put(`/boards/${boardId}/list/${listId}/update`, { title });
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}

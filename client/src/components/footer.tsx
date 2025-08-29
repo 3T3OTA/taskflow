@@ -14,7 +14,7 @@ export const Footer = () => {
           </div>
 
           <p className="mx-auto mt-6 max-w-md text-center text-default-500">
-            TaskFlow Pro lets you create unlimited boards, customize columns, and organize tasks your way.
+            TaskFlow Pro lets you create unlimited boards, customize lists, and organize tasks your way.
           </p>
 
           <ul className="mt-10 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-10">

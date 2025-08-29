@@ -8,8 +8,11 @@ const boardSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    unique: true,
   },
+  image: {
+    type: String,
+    default: "https://via.placeholder.com/150",
+  }
 });
 
 const Board = mongoose.model("Board", boardSchema);

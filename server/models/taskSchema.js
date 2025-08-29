@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const taskSchema = new mongoose.Schema({
-  columnId: {
+  listId: {
     type: String,
     required: true,
   },
@@ -11,12 +11,16 @@ const taskSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
   },
   status: {
     type: String,
-    enum: ["todo", "in-progress", "done"],
+    enum: ["todo", "done"],
     default: "todo",
+  },
+  order: {
+    type: Number,
+    required: true,
+    default: 0,
   },
   createdAt: {
     type: Date,

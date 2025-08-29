@@ -2,7 +2,7 @@
 export const heroData = {
   title: "Your Personal Task Board,",
   spantitle: "Anywhere",
-  subtitle: "TaskFlow Pro lets you create unlimited boards, customize columns, and organize tasks your way. Sign up, log in, and manage all your projects from one clean, intuitive dashboard.",
+  subtitle: "TaskFlow Pro lets you create unlimited boards, customize lists, and organize tasks your way. Sign up, log in, and manage all your projects from one clean, intuitive dashboard.",
   ctaPrimary: {
     label: "Dashboard",
     href: "/dashboard",

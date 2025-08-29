@@ -10,8 +10,8 @@ export const howItWorksData = {
       chipText: "Start Here"
     },
     {
-      title: "Add Columns",
-      description: "Create columns to represent different stages in your workflow (e.g., To Do, In Progress, Done).",
+      title: "Add Lists",
+      description: "Create lists to represent different stages in your workflow (e.g., To Do, In Progress, Done).",
       color: "success",
       chipText: "Organize Stages"
     },
