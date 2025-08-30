@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Button } from "@heroui/react";
 import { Trash, EllipsisVertical, Plus, Menu } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
-import { listsOrderUpdate, addListsToBoard, deleteListfromBoard, updateListInBoard } from '../../services/api';
+import { listsOrderUpdate, addListsToBoard, deleteListfromBoard, updateListInBoard, addTaskToList, moveAndOrderTasks, deleteTaskfromList, updateTask } from '../../services/api';
 
 interface Task {
   id: string;
@@ -24,6 +24,10 @@ function Board(props: { boardData: any; onListsReorder?: (newOrder: any[]) => vo
   const [newListTitle, setNewListTitle] = React.useState("");
   const [editingListId, setEditingListId] = React.useState<string | null>(null);
   const [editingTitle, setEditingTitle] = React.useState("");
+  const [showAddTaskInput, setShowAddTaskInput] = React.useState<{ [listId: string]: boolean }>({});
+  const [newTaskTitle, setNewTaskTitle] = React.useState<{ [listId: string]: string }>({});
+  const [editingTask, setEditingTask] = React.useState<string | null>(null);
+  const [editingTaskTitle, setEditingTaskTitle] = React.useState<string>("");
 
   React.useEffect(() => {
     if (prevListsRef.current !== props.boardData.lists) {
@@ -32,7 +36,10 @@ function Board(props: { boardData: any; onListsReorder?: (newOrder: any[]) => vo
     }
   }, [props.boardData.lists]);
 
-  const addTask = (listId: string) => {
+  const addTask = async (listId: string) => {
+    const title = (newTaskTitle[listId] || '').trim();
+    if (!title) return;
+    const tempId = Date.now().toString();
     setLists(lists =>
       lists.map(list =>
         list.id === listId
@@ -40,12 +47,54 @@ function Board(props: { boardData: any; onListsReorder?: (newOrder: any[]) => vo
               ...list,
               tasks: [
                 ...list.tasks,
-                { id: Date.now().toString(), title: 'New Task' },
+                { id: tempId, title },
               ],
             }
           : list
       )
     );
+    setShowAddTaskInput(inputs => ({ ...inputs, [listId]: false }));
+    setNewTaskTitle(inputs => ({ ...inputs, [listId]: '' }));
+    try {
+      const res = await addTaskToList(props.boardData.id, listId, title);
+      if (res && res._id) {
+        setLists(lists =>
+          lists.map(list =>
+            list.id === listId
+              ? {
+                  ...list,
+                  tasks: list.tasks.map(t => t.id === tempId ? { ...t, id: res._id, ...res } : t),
+                }
+              : list
+          )
+        );
+      }
+    } catch (err) {
+      setLists(lists =>
+        lists.map(list =>
+          list.id === listId
+            ? { ...list, tasks: list.tasks.filter(t => t.id !== tempId) }
+            : list
+        )
+      );
+      console.error('Failed to add task', err);
+    }
+  };
+
+  const deleteTask = async (listId: string, taskId: string) => {
+    if (!confirm("Are you sure you want to delete this task?")) return;
+    const originalLists = lists;
+    setLists(lists => lists.map(list =>
+      list.id === listId
+        ? { ...list, tasks: list.tasks.filter(t => t.id !== taskId) }
+        : list
+    ));
+    try {
+      await deleteTaskfromList(props.boardData.id, listId, taskId);
+    } catch (err) {
+      setLists(originalLists);
+      console.error('Failed to delete task', err);
+    }
   };
 
   const addList = async () => {
@@ -111,7 +160,7 @@ function Board(props: { boardData: any; onListsReorder?: (newOrder: any[]) => vo
       if (props.onListsReorder) props.onListsReorder(reordered);
       try {
         const boardId = props.boardData.id;
-        const newListIds = reordered.map(l => l.id);
+        const newListIds = reordered.map(l => l.id).filter(Boolean);
         await listsOrderUpdate(boardId, newListIds);
       } catch (err) {
         console.error('Failed to update lists order', err);
@@ -123,18 +172,28 @@ function Board(props: { boardData: any; onListsReorder?: (newOrder: any[]) => vo
     if (sourceListIdx === -1 || destListIdx === -1) return;
 
     if (sourceListIdx === destListIdx) {
-      const newTasks = Array.from(lists[sourceListIdx].tasks);
+      const newTasks = Array.from(lists[sourceListIdx].tasks).filter(Boolean);
       const [removedTask] = newTasks.splice(result.source.index, 1);
+      if (!removedTask) return;
       newTasks.splice(result.destination.index, 0, removedTask);
       setLists(lists =>
         lists.map((list, idx) =>
           idx === sourceListIdx ? { ...list, tasks: newTasks } : list
         )
       );
+      try {
+        const boardId = props.boardData.id;
+        const listId = lists[sourceListIdx].id;
+        const taskIds = newTasks.map(t => t && t.id).filter(Boolean);
+        await moveAndOrderTasks(boardId, listId, listId, taskIds, taskIds[result.destination.index]);
+      } catch (err) {
+        console.error('Failed to update tasks order', err);
+      }
     } else {
-      const sourceTasks = Array.from(lists[sourceListIdx].tasks);
+      const sourceTasks = Array.from(lists[sourceListIdx].tasks).filter(Boolean);
       const [removedTask] = sourceTasks.splice(result.source.index, 1);
-      const destTasks = Array.from(lists[destListIdx].tasks);
+      if (!removedTask) return;
+      const destTasks = Array.from(lists[destListIdx].tasks).filter(Boolean);
       destTasks.splice(result.destination.index, 0, removedTask);
       setLists(lists =>
         lists.map((list, idx) => {
@@ -143,6 +202,16 @@ function Board(props: { boardData: any; onListsReorder?: (newOrder: any[]) => vo
           return list;
         })
       );
+      try {
+        const boardId = props.boardData.id;
+        const sourceListId = lists[sourceListIdx].id;
+        const destListId = lists[destListIdx].id;
+        const destOrderedTaskIds = destTasks.map(t => t && t.id).filter(Boolean);
+        const movedTaskId = removedTask.id;
+        await moveAndOrderTasks(boardId, sourceListId, destListId, destOrderedTaskIds, movedTaskId);
+      } catch (err) {
+        console.error('Failed to move and update tasks order', err);
+      }
     }
   };
 
@@ -166,14 +235,26 @@ function Board(props: { boardData: any; onListsReorder?: (newOrder: any[]) => vo
                     <Card className="w-72 min-w-[280px] shadow-xl bg-default-100 flex-shrink-0">
                       <div className="p-3 flex justify-between items-center" {...provided.dragHandleProps}>
                         {editingListId === list.id ? (
-                          <input
-                            className="border rounded px-2 py-1 text-sm w-full mr-2"
+                          <textarea
+                            className="border rounded px-2 py-1 text-sm w-full mr-2 resize-none min-h-[36px] max-h-[120px] overflow-hidden"
                             value={editingTitle}
                             autoFocus
-                            onChange={e => setEditingTitle(e.target.value)}
+                            rows={1}
+                            onChange={e => {
+                              setEditingTitle(e.target.value);
+                              const target = e.target as HTMLTextAreaElement;
+                              target.style.height = '36px';
+                              target.style.height = target.scrollHeight + 'px';
+                            }}
+                            onInput={e => {
+                              const target = e.target as HTMLTextAreaElement;
+                              target.style.height = '36px';
+                              target.style.height = target.scrollHeight + 'px';
+                            }}
                             onBlur={() => saveListTitle(list.id)}
                             onKeyDown={e => {
-                              if (e.key === 'Enter') {
+                              if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault();
                                 saveListTitle(list.id);
                               } else if (e.key === 'Escape') {
                                 setEditingListId(null);
@@ -200,45 +281,127 @@ function Board(props: { boardData: any; onListsReorder?: (newOrder: any[]) => vo
                       </div>
                       <Droppable droppableId={list.id} type="TASK">
                         {(provided, snapshot) => (
-                          <div
-                            className={
-                              "px-2 pb-2 pt-2 min-h-[120px] transition-colors " +
-                              (snapshot.isDraggingOver ? "bg-default-200" : "")
-                            }
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                          >
-
-                            {list.tasks.map((task, tidx) => (
-                              <Draggable draggableId={task.id} index={tidx} key={task.id}>
-                                {(provided) => (
-                                  <Card
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    className="mb-2 p-2"
-                                  >
-                                    <div className="flex justify-between items-center">
-                                      <span className="text-sm">{task.title}</span>
-                                      <Button isIconOnly size="sm" variant="light" >
-                                        <Menu width={16} />
-                                      </Button>
-                                    </div>
-                                  </Card>
-                                )}
-                              </Draggable>
-                            ))}
-                            {provided.placeholder}
-                            <Button
-                              size="sm"
-                              variant="flat"
-                              className="w-full justify-start"
-                              startContent={<Plus width={16} />}
-                              onPress={() => addTask(list.id)}
+                          <>
+                            <div
+                              className={
+                                "px-2 pb-2 pt-2 flex flex-col transition-colors overflow-y-auto scrollbar-thin scrollbar-thumb-default-300 scrollbar-track-default-100 " +
+                                (snapshot.isDraggingOver ? "bg-default-200" : "")
+                              }
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              style={{
+                                minHeight: list.tasks.length <= 2 ? 10 : 120, 
+                                maxHeight: 'calc(100vh - 360px)',
+                                height: '100%',
+                                overflowY: 'auto',
+                                display: 'flex',
+                                flexDirection: 'column',
+                              }}
                             >
-                              Add a card
-                            </Button>
-                          </div>
+                              <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                {list.tasks.map((task, tidx) => (
+                                  <Draggable draggableId={task.id} index={tidx} key={task.id}>
+                                    {(provided) => (
+                                      <Card
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        className="mb-2 p-2 cursor-pointer"
+                                        onDoubleClick={() => {
+                                          setEditingTask(`${list.id}-${task.id}`);
+                                          setEditingTaskTitle(task.title);
+                                        }}
+                                      >
+                                        <div className="flex justify-between items-center">
+                                          {editingTask === `${list.id}-${task.id}` ? (
+                                            <input
+                                              className="border rounded px-2 py-1 text-sm w-full mr-2"
+                                              value={editingTaskTitle}
+                                              autoFocus
+                                              onChange={e => setEditingTaskTitle(e.target.value)}
+                                              onBlur={async () => {
+                                                if (editingTaskTitle.trim() && editingTaskTitle !== task.title) {
+                                                  await updateTask(props.boardData.id, list.id, task.id, editingTaskTitle.trim());
+                                                  setLists(lists => lists.map(l => l.id === list.id ? { ...l, tasks: l.tasks.map(t => t.id === task.id ? { ...t, title: editingTaskTitle.trim() } : t) } : l));
+                                                }
+                                                setEditingTask(null);
+                                              }}
+                                              onKeyDown={async e => {
+                                                if (e.key === 'Enter') {
+                                                  if (editingTaskTitle.trim() && editingTaskTitle !== task.title) {
+                                                    await updateTask(props.boardData.id, list.id, task.id, editingTaskTitle.trim());
+                                                    setLists(lists => lists.map(l => l.id === list.id ? { ...l, tasks: l.tasks.map(t => t.id === task.id ? { ...t, title: editingTaskTitle.trim() } : t) } : l));
+                                                  }
+                                                  setEditingTask(null);
+                                                } else if (e.key === 'Escape') {
+                                                  setEditingTask(null);
+                                                }
+                                              }}
+                                            />
+                                          ) : (
+                                            <span className="text-sm">{task.title}</span>
+                                          )}
+                                          <div className="flex items-center gap-1">
+                                            <Button isIconOnly size="sm" variant="flat" color='danger' onPress={deleteTask.bind(null, list.id, task.id)}>
+                                              <Trash width={16} />
+                                            </Button>
+                                          </div>
+                                        </div>
+                                      </Card>
+                                    )}
+                                  </Draggable>
+                                ))}
+                                {provided.placeholder}
+                              </div>
+                            </div>
+                            <div className="px-2 pb-2 pt-1">
+                              {showAddTaskInput[list.id] ? (
+                                <div className="flex flex-col gap-1">
+                                  <textarea
+                                    className="border rounded px-2 py-1 text-sm resize-none min-h-[36px] max-h-[120px] overflow-y-auto"
+                                    autoFocus
+                                    value={newTaskTitle[list.id] || ''}
+                                    rows={1}
+                                    onChange={e => {
+                                      setNewTaskTitle(inputs => ({ ...inputs, [list.id]: e.target.value }));
+                                      const target = e.target as HTMLTextAreaElement;
+                                      target.style.height = '36px';
+                                      target.style.height = target.scrollHeight + 'px';
+                                    }}
+                                    onInput={e => {
+                                      const target = e.target as HTMLTextAreaElement;
+                                      target.style.height = '36px';
+                                      target.style.height = target.scrollHeight + 'px';
+                                    }}
+                                    onKeyDown={e => {
+                                      if (e.key === 'Enter' && !e.shiftKey) { addTask(list.id); }
+                                      if (e.key === 'Escape') setShowAddTaskInput(inputs => ({ ...inputs, [list.id]: false }));
+                                    }}
+                                    placeholder="Task title"
+                                  />
+                                  <div className="flex gap-2">
+                                    <Button size="sm" onPress={() => addTask(list.id)}>
+                                      Add card
+                                    </Button>
+                                    <Button size="sm" variant="light" onPress={() => setShowAddTaskInput(inputs => ({ ...inputs, [list.id]: false }))}>
+                                      Cancel
+                                    </Button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <Button
+                                  size="sm"
+                                  variant="flat"
+                                  className="w-full justify-start mt-1 bg-default-200 hover:bg-default-300 border-none shadow-none"
+                                  startContent={<Plus width={16} />}
+                                  onPress={() => setShowAddTaskInput(inputs => ({ ...inputs, [list.id]: true }))}
+                                  style={{ boxShadow: 'none', border: 'none' }}
+                                >
+                                  Add a card
+                                </Button>
+                              )}
+                            </div>
+                          </>
                         )}
                       </Droppable>
                     </Card>
@@ -247,19 +410,19 @@ function Board(props: { boardData: any; onListsReorder?: (newOrder: any[]) => vo
               </Draggable>
             ))}
             {provided.placeholder}
-            {}
             <div className="flex flex-col">
               <Card className="w-72 min-w-[280px] shadow-xl bg-default-100 flex-shrink-0">
                 <div className="p-3 flex flex-col gap-2">
                   {showAddListInput ? (
                     <>
-                      <input
-                        className="border rounded px-2 py-1 text-sm"
+                      <textarea
+                        className="border rounded px-2 py-1 text-sm resize-y min-h-[36px] max-h-[120px]"
                         autoFocus
                         value={newListTitle}
+                        rows={1}
                         onChange={e => setNewListTitle(e.target.value)}
                         onKeyDown={e => {
-                          if (e.key === 'Enter') addList();
+                          if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); addList(); }
                           if (e.key === 'Escape') setShowAddListInput(false);
                         }}
                         placeholder="List title"

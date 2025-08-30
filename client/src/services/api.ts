@@ -140,3 +140,62 @@ export const updateListInBoard = async (boardId: string, listId: string, title: 
         throw error;
     }
 }
+
+export const addTaskToList = async (boardId: string, listId: string, title: string) => {
+    try {
+        const response = await api.post(`/boards/${boardId}/list/${listId}/task/add`, { title });
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}
+
+export const moveAndOrderTasks = async (
+    boardId: string,
+    sourceListId: string,
+    destListId: string,
+    destOrderedTaskIds: string[],
+    movedTaskId: string
+) => {
+    try {
+        const response = await api.put(`/boards/${boardId}/task/move`, {
+            sourceListId,
+            destListId,
+            destOrderedTaskIds,
+            movedTaskId
+        });
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}
+
+export const deleteTaskfromList = async (boardId: string, listId: string, taskId: string) => {
+    try {
+        const response = await api.delete(`/boards/${boardId}/list/${listId}/task/${taskId}`);
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}
+
+export const updateTask = async (boardId: string, listId: string, taskId: string, title: string) => {
+    try {
+        const response = await api.put(`/boards/${boardId}/list/${listId}/task/${taskId}/update`, { title });
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}

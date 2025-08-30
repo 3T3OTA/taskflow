@@ -16,4 +16,8 @@ router.put("/:id/list/:listId/update", authDecode, authorizeBoardOwner, boardCon
 
 router.post("/:id/list/:listId/task/add", authDecode, authorizeBoardOwner, boardController.addTaskToList);
 
+router.put("/:id/task/move", authDecode, authorizeBoardOwner, boardController.moveAndOrderTasks);
+router.delete("/:id/list/:listId/task/:taskId", authDecode, authorizeBoardOwner, boardController.deleteTaskfromList);
+router.put("/:id/list/:listId/task/:taskId/update", authDecode, authorizeBoardOwner, boardController.updateTask);
+
 export default router;

@@ -280,6 +280,111 @@ class BoardService {
       };
     }
   }
+
+  async moveAndOrderTasks(sourceListId, destListId, destOrderedTaskIds, movedTaskId) {
+    try {
+      if (sourceListId === destListId) {
+        return await this.tasksOrderUpdate(destListId, destOrderedTaskIds);
+      }
+      if (movedTaskId) {
+        await Task.findByIdAndUpdate(movedTaskId, { listId: destListId });
+      }
+      
+      const destTasks = await Task.find({ listId: destListId });
+      const destTaskMap = {};
+      destTasks.forEach((task) => {
+        destTaskMap[task._id.toString()] = task;
+      });
+      for (let i = 0; i < destOrderedTaskIds.length; i++) {
+        const taskId = destOrderedTaskIds[i];
+        if (destTaskMap[taskId]) {
+          destTaskMap[taskId].order = i;
+          await destTaskMap[taskId].save();
+        } else if (taskId === movedTaskId) {
+          
+          await Task.findByIdAndUpdate(taskId, { order: i, listId: destListId });
+        }
+      }
+      
+      if (sourceListId !== destListId && movedTaskId) {
+        const sourceTasks = await Task.find({ listId: sourceListId }).sort({ order: 1 });
+        for (let i = 0; i < sourceTasks.length; i++) {
+          sourceTasks[i].order = i;
+          await sourceTasks[i].save();
+        }
+      }
+      return { success: true, message: "Task moved and order updated successfully" };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Error moving/updating tasks order: ${error.message}`,
+      };
+    }
+  }
+
+  async deleteTaskfromList(taskId, listId) {
+    try {
+      const task = await Task.findById(taskId);
+      
+      
+      
+      if (task.listId.toString() !== listId) {
+        return { success: false, message: "Task does not belong to this list" };
+      }
+
+      await Task.findByIdAndDelete(taskId);
+      return { success: true, message: "Task deleted successfully" };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Error deleting task: ${error.message}`,
+      };
+    }
+  }
+
+  
+  async tasksOrderUpdate(listId, orderedTaskIds) {
+    try {
+      const tasks = await Task.find({ listId }).sort({ order: 1 });
+      if (!tasks || tasks.length === 0) {
+        return { success: false, message: "No tasks found for this list" };
+      }
+      const taskMap = {};
+      tasks.forEach((task) => {
+        taskMap[task._id.toString()] = task;
+      });
+      for (let i = 0; i < orderedTaskIds.length; i++) {
+        const taskId = orderedTaskIds[i];
+        if (taskMap[taskId]) {
+          taskMap[taskId].order = i;
+          await taskMap[taskId].save();
+        }
+      }
+      return { success: true, message: "Tasks order updated successfully" };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Error updating tasks order: ${error.message}`,
+      };
+    }
+  }
+
+  async updateTask(taskId, listId, updateData) {
+    try {
+      const task = await Task.findById(taskId);
+      if (!task) {
+        return { success: false, message: "Task not found" };
+      }
+      Object.assign(task, updateData);
+      await task.save();
+      return { success: true, task };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Error updating task: ${error.message}`,
+      };
+    }
+  }
 }
 
 export default new BoardService();

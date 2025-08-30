@@ -102,7 +102,9 @@ class BoardController {
     const boardId = req.params.id;
     const taskData = req.body;
     if (!listId || !boardId) {
-      return res.status(400).json({ error: "List ID and Board ID are required" });
+      return res
+        .status(400)
+        .json({ error: "List ID and Board ID are required" });
     }
     if (!taskData || !taskData.title) {
       return res
@@ -120,7 +122,9 @@ class BoardController {
     const listId = req.params.listId;
     const boardId = req.params.id;
     if (!listId || !boardId) {
-      return res.status(400).json({ error: "List ID and Board ID are required" });
+      return res
+        .status(400)
+        .json({ error: "List ID and Board ID are required" });
     }
     const result = await boardService.deleteListfromBoard(listId, boardId);
     if (result.success) {
@@ -134,16 +138,72 @@ class BoardController {
     const boardId = req.params.id;
     const updateData = req.body;
     if (!listId || !boardId) {
-      return res.status(400).json({ error: "List ID and Board ID are required" });
+      return res
+        .status(400)
+        .json({ error: "List ID and Board ID are required" });
     }
-    if (!updateData ) {
+    if (!updateData) {
       return res
         .status(400)
         .json({ error: "Update data with title is required" });
     }
-    const result = await boardService.updateListInBoard(listId, boardId, updateData);
+    const result = await boardService.updateListInBoard(
+      listId,
+      boardId,
+      updateData
+    );
     if (result.success) {
       return res.status(200).json(result.list);
+    }
+    return res.status(400).json({ error: result.message });
+  }
+
+
+  async moveAndOrderTasks(req, res) {
+    const { sourceListId, destListId, destOrderedTaskIds, movedTaskId } = req.body;
+    if (!sourceListId || !destListId || !Array.isArray(destOrderedTaskIds) || !movedTaskId) {
+      return res.status(400).json({ error: "sourceListId, destListId, destOrderedTaskIds, and movedTaskId are required" });
+    }
+    try {
+      const result = await boardService.moveAndOrderTasks(sourceListId, destListId, destOrderedTaskIds, movedTaskId);
+      if (result.success) {
+        return res.status(200).json({ message: result.message });
+      }
+      return res.status(400).json({ error: result.message });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
+  async deleteTaskfromList(req, res) {
+    const listId = req.params.listId;
+    const taskId = req.params.taskId;
+    const boardId = req.params.id;
+    if (!listId || !taskId || !boardId) {
+      return res
+        .status(400)
+        .json({ error: "List ID, Task ID, and Board ID are required" });
+    }
+    const result = await boardService.deleteTaskfromList(taskId, listId);
+    if (result.success) {
+      return res.status(200).json({ message: result.message });
+    }
+    return res.status(400).json({ error: result.message });
+  }
+
+  async updateTask(req, res) {
+    const taskId = req.params.taskId;
+    const listId = req.params.listId;
+    const boardId = req.params.id;
+    const updateData = req.body;
+    if (!taskId || !listId || !boardId) {
+      return res
+        .status(400)
+        .json({ error: "Task ID, List ID, and Board ID are required" });
+    }
+    const result = await boardService.updateTask(taskId, listId, updateData);
+    if (result.success) {
+      return res.status(200).json(result.task);
     }
     return res.status(400).json({ error: result.message });
   }
