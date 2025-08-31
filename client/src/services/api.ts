@@ -199,3 +199,35 @@ export const updateTask = async (boardId: string, listId: string, taskId: string
         throw error;
     }
 }
+
+export const updateBoard = async (boardId: string, title: string, image: File | null) => {
+    try {
+        const formData = new FormData();
+        formData.append('title', title);
+        if (image) {
+            formData.append('image', image);
+        }
+        // Remove Content-Type header for this request so browser sets it (multipart/form-data)
+        const response = await api.put(`/boards/${boardId}/update`, formData, {
+            headers: { 'Content-Type': undefined }
+        });
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}
+
+export const deleteBoard = async (boardId: string) => {
+    try {
+        const response = await api.delete(`/boards/${boardId}/delete`);
+        return response.data;
+    } catch (error) {
+        if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response) {
+            throw (error as any).response.data;
+        }
+        throw error;
+    }
+}

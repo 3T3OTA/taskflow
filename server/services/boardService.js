@@ -45,14 +45,40 @@ class BoardService {
       const board = await Board.findByIdAndUpdate(boardId, updateData, {
         new: true,
       });
+
       if (!board) {
         return { success: false, message: "Board not found" };
       }
-      return { success: true, board };
+
+      const obj = board.toObject();
+      obj.id = obj._id;
+      delete obj._id;
+      delete obj.__v;
+
+      return { success: true, board: obj };
     } catch (error) {
       return {
         success: false,
         message: `Error updating board: ${error.message}`,
+      };
+    }
+  }
+
+  async deleteBoard(boardId) {
+    try {
+      const board = await Board.findByIdAndDelete(boardId);
+      if (!board) {
+        return { success: false, message: "Board not found" };
+      }
+      await List.deleteMany({ boardId });
+      return {
+        success: true,
+        message: "Board and associated lists deleted successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Error deleting board: ${error.message}`,
       };
     }
   }
@@ -119,7 +145,7 @@ class BoardService {
         delete obj.__v;
         return obj;
       });
-      
+
       const listsWithTasks = await Promise.all(
         formattedLists.map(async (list) => {
           const tasksResult = await this.getTasksByListId(list.id);
@@ -147,7 +173,10 @@ class BoardService {
         return { success: false, message: "List not found" };
       }
       if (list.boardId.toString() !== boardId) {
-        return { success: false, message: "List does not belong to this board" };
+        return {
+          success: false,
+          message: "List does not belong to this board",
+        };
       }
       await List.findByIdAndDelete(listId);
       await Task.deleteMany({ listId });
@@ -223,7 +252,10 @@ class BoardService {
         return { success: false, message: "List not found" };
       }
       if (list.boardId.toString() !== boardId) {
-        return { success: false, message: "List does not belong to this board" };
+        return {
+          success: false,
+          message: "List does not belong to this board",
+        };
       }
       const lastTask = await Task.findOne({ listId }).sort({ order: -1 });
       const nextOrder = lastTask ? lastTask.order + 1 : 0;
@@ -267,11 +299,16 @@ class BoardService {
         return { success: false, message: "List not found" };
       }
       if (list.boardId.toString() !== boardId) {
-        return { success: false, message: "List does not belong to this board" };
+        return {
+          success: false,
+          message: "List does not belong to this board",
+        };
       }
 
-      const title = updateData
-      const updatedList = await List.findByIdAndUpdate(listId, title, { new: true } );
+      const title = updateData;
+      const updatedList = await List.findByIdAndUpdate(listId, title, {
+        new: true,
+      });
       return { success: true, list: updatedList };
     } catch (error) {
       return {
@@ -281,7 +318,12 @@ class BoardService {
     }
   }
 
-  async moveAndOrderTasks(sourceListId, destListId, destOrderedTaskIds, movedTaskId) {
+  async moveAndOrderTasks(
+    sourceListId,
+    destListId,
+    destOrderedTaskIds,
+    movedTaskId
+  ) {
     try {
       if (sourceListId === destListId) {
         return await this.tasksOrderUpdate(destListId, destOrderedTaskIds);
@@ -289,7 +331,7 @@ class BoardService {
       if (movedTaskId) {
         await Task.findByIdAndUpdate(movedTaskId, { listId: destListId });
       }
-      
+
       const destTasks = await Task.find({ listId: destListId });
       const destTaskMap = {};
       destTasks.forEach((task) => {
@@ -301,19 +343,26 @@ class BoardService {
           destTaskMap[taskId].order = i;
           await destTaskMap[taskId].save();
         } else if (taskId === movedTaskId) {
-          
-          await Task.findByIdAndUpdate(taskId, { order: i, listId: destListId });
+          await Task.findByIdAndUpdate(taskId, {
+            order: i,
+            listId: destListId,
+          });
         }
       }
-      
+
       if (sourceListId !== destListId && movedTaskId) {
-        const sourceTasks = await Task.find({ listId: sourceListId }).sort({ order: 1 });
+        const sourceTasks = await Task.find({ listId: sourceListId }).sort({
+          order: 1,
+        });
         for (let i = 0; i < sourceTasks.length; i++) {
           sourceTasks[i].order = i;
           await sourceTasks[i].save();
         }
       }
-      return { success: true, message: "Task moved and order updated successfully" };
+      return {
+        success: true,
+        message: "Task moved and order updated successfully",
+      };
     } catch (error) {
       return {
         success: false,
@@ -325,9 +374,7 @@ class BoardService {
   async deleteTaskfromList(taskId, listId) {
     try {
       const task = await Task.findById(taskId);
-      
-      
-      
+
       if (task.listId.toString() !== listId) {
         return { success: false, message: "Task does not belong to this list" };
       }
@@ -342,7 +389,6 @@ class BoardService {
     }
   }
 
-  
   async tasksOrderUpdate(listId, orderedTaskIds) {
     try {
       const tasks = await Task.find({ listId }).sort({ order: 1 });

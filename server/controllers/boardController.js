@@ -22,24 +22,46 @@ class BoardController {
     const result = await boardService.getBoardsByUserId(userId);
 
     if (result.success) {
+      result.boards = result.boards.map((board) => {
+        if (board.image && !board.image.includes('placehold.co')) {
+          board.image = req.protocol + '://' + req.get('host') + '/uploads/' + board.image;
+        }
+        return board;
+      });
       return res.status(200).json(result.boards);
     }
     return res.status(400).json({ error: result.message });
   }
 
   async updateBoard(req, res) {
+    const boardId = req.params.id;
     const updateData = req.body;
-    if (!updateData.title || !updateData.boardId) {
+    if (!updateData.title || !boardId) {
       return res.status(400).json({ error: "Title and Board ID are required" });
     }
+    if (req.file) {
+      updateData.image = req.file.filename; 
+    }
 
-    const boardId = updateData.boardId;
-    delete updateData.boardId;
-
-    console.log("Update Data:", updateData);
     const result = await boardService.updateBoard(boardId, updateData);
     if (result.success) {
+      if (result.board.image && !result.board.image.includes('placehold.co')) {
+        result.board.image =
+          req.protocol + "://" + req.get("host") + "/uploads/" + result.board.image;
+      }
       return res.status(200).json(result.board);
+    }
+    return res.status(400).json({ error: result.message });
+  }
+
+  async deleteBoard(req, res) {
+    const boardId = req.params.id;
+    if (!boardId) {
+      return res.status(400).json({ error: "Board ID is required" });
+    }
+    const result = await boardService.deleteBoard(boardId);
+    if (result.success) {
+      return res.status(200).json({ message: result.message });
     }
     return res.status(400).json({ error: result.message });
   }
@@ -53,6 +75,9 @@ class BoardController {
     }
     const result = await boardService.getBoardById(boardId, userId);
     if (result.success) {
+        if (result.board.image && !result.board.image.includes('placehold.co')) {
+          result.board.image = req.protocol + '://' + req.get('host') + '/uploads/' + result.board.image;
+        }
       return res.status(200).json(result.board);
     }
     return res.status(404).json({ error: result.message });
@@ -158,14 +183,29 @@ class BoardController {
     return res.status(400).json({ error: result.message });
   }
 
-
   async moveAndOrderTasks(req, res) {
-    const { sourceListId, destListId, destOrderedTaskIds, movedTaskId } = req.body;
-    if (!sourceListId || !destListId || !Array.isArray(destOrderedTaskIds) || !movedTaskId) {
-      return res.status(400).json({ error: "sourceListId, destListId, destOrderedTaskIds, and movedTaskId are required" });
+    const { sourceListId, destListId, destOrderedTaskIds, movedTaskId } =
+      req.body;
+    if (
+      !sourceListId ||
+      !destListId ||
+      !Array.isArray(destOrderedTaskIds) ||
+      !movedTaskId
+    ) {
+      return res
+        .status(400)
+        .json({
+          error:
+            "sourceListId, destListId, destOrderedTaskIds, and movedTaskId are required",
+        });
     }
     try {
-      const result = await boardService.moveAndOrderTasks(sourceListId, destListId, destOrderedTaskIds, movedTaskId);
+      const result = await boardService.moveAndOrderTasks(
+        sourceListId,
+        destListId,
+        destOrderedTaskIds,
+        movedTaskId
+      );
       if (result.success) {
         return res.status(200).json({ message: result.message });
       }
