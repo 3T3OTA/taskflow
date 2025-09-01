@@ -14,12 +14,11 @@ export default function DashboardLayout({
   onBoardCreated?: () => void;
 }) {
   return (
-    <div className="relative flex flex-col h-screen bg-default-50">
+    <div className="relative flex flex-col min-h-screen bg-default-50">
       <NavbarDashboard isCreateOpen={isCreateOpen} setIsCreateOpen={setIsCreateOpen} onBoardCreated={onBoardCreated} />
-        <div className="flex flex-1">
+        <div className="flex flex-1 min-h-0">
             <Sidebar />
-            <div className="flex-1 overflow-y-auto">
-            {}
+            <div className="flex-1 overflow-y-auto bg-default-50 min-h-screen">
             {children}
             </div>
       </div>

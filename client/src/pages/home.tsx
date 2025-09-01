@@ -1,25 +1,26 @@
 import DefaultLayout from "@/layouts/default";
 import Hero from "@/components/home/hero";
-import Features from "@/components/home/features";
-import Trusted from "@/components/home/trusted";
-import Testimonials from "@/components/home/testimonials";
-import HowItWorks from "@/components/home/howitworks";
-import CallToAction from "@/components/home/calltoaction";
 import GlowEffect from "@/components/ui/glow-effect";
 import { Divider } from "@heroui/react";
+import React, { Suspense } from "react";
+
+const HowItWorks = React.lazy(() => import("@/components/home/howitworks"));
+const Features = React.lazy(() => import("@/components/home/features"));
+const Testimonials = React.lazy(() => import("@/components/home/testimonials"));
+const CallToAction = React.lazy(() => import("@/components/home/calltoaction"));
 
 export default function HomePage() {
   return (
     <DefaultLayout>
-      <GlowEffect variant="primary" intensity="high" className="min-h-screen">
+      <GlowEffect variant="primary" className="min-h-screen">
         <Hero />
         <Divider />
-        <Trusted />
-        <HowItWorks />
-        <Features />
-        <Testimonials />
-        <CallToAction />
-        {}
+        <Suspense fallback={null}>
+          <HowItWorks />
+          <Features />
+          <Testimonials />
+          <CallToAction />
+        </Suspense>
       </GlowEffect>
     </DefaultLayout>
   );

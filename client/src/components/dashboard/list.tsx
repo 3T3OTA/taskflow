@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Button } from "@heroui/react";
-import { Trash, EllipsisVertical, Plus, Menu } from "lucide-react";
+import { Trash, EllipsisVertical, Plus } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { listsOrderUpdate, addListsToBoard, deleteListfromBoard, updateListInBoard, addTaskToList, moveAndOrderTasks, deleteTaskfromList, updateTask } from '../../services/api';
 

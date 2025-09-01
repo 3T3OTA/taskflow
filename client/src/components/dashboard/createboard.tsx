@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter, Button, Input, addToast } from "@heroui/react";
 import { DiamondPlus } from "lucide-react";
 import { createBoard } from "@/services/api";
+import { useNavigate } from "react-router-dom";
 
-function CreateBoard({ isOpen, onOpenChange, onBoardCreated }: { isOpen: boolean, onOpenChange: (open: boolean) => void, onBoardCreated?: () => void }) {
+function CreateBoard({ isOpen, onOpenChange, onBoardCreated }: { isOpen: boolean, onOpenChange: (open: boolean) => void, onBoardCreated?: (board?: any) => void }) {
 
     const [title, setTitle] = useState("");
+    const navigate = useNavigate();
     
     const handleCreateBoard = async () => {
 
@@ -18,6 +20,7 @@ function CreateBoard({ isOpen, onOpenChange, onBoardCreated }: { isOpen: boolean
             addToast({ title: `Board "${title}" created successfully!`, color: "success" });
             setTitle("");
             onOpenChange(false);
+            navigate("/dashboard");
             if (onBoardCreated) onBoardCreated();
         } catch (error) {
             console.error("Error creating board:", error);

@@ -72,7 +72,7 @@ const EditBoardModal: React.FC<EditBoardModalProps> = ({ isOpen, onOpenChange, b
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur" placement="center">
       <ModalContent>
-        {(closeModal) => (
+        {() => (
           <>
             <ModalHeader className="flex flex-col gap-1">Edit Board</ModalHeader>
             <ModalBody className="flex flex-col gap-4">
