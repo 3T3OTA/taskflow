@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-// const APP_URL = 'http://localhost:3000/api';
 const APP_URL = 'http://192.168.1.3:3000/api';
 
 const api = axios.create({
@@ -208,7 +207,6 @@ export const updateBoard = async (boardId: string, title: string, image: File | 
         if (image) {
             formData.append('image', image);
         }
-        // Remove Content-Type header for this request so browser sets it (multipart/form-data)
         const response = await api.put(`/boards/${boardId}/update`, formData, {
             headers: { 'Content-Type': undefined }
         });

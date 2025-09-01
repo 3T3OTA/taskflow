@@ -43,7 +43,6 @@ const EditBoardModal: React.FC<EditBoardModalProps> = ({ isOpen, onOpenChange, b
       const updated = await updateBoard(board.id, title, image);
       addToast({ title: "Board updated successfully!", color: "success" });
       if (onBoardUpdated) {
-        // Merge updated fields with the old board to preserve lists/tasks
         onBoardUpdated({ ...board, ...updated });
       }
       onOpenChange(false);

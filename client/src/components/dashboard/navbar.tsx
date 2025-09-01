@@ -78,12 +78,10 @@ function NavbarDashboard({ isCreateOpen, setIsCreateOpen, onBoardCreated }: { is
         <Button variant="solid" color="primary" onPress={() => setIsCreateOpen && setIsCreateOpen(true)}>Create</Button>
       </NavbarContent>
 
-      {/* Responsive search for mobile */}
+      {}
       <NavbarContent as="div" className="items-center sm:hidden" justify="center">
         <div className="flex w-full items-center gap-2 relative">
-          {/* <Button isIconOnly size="sm" variant="light" aria-label="Search" onPress={() => setShowDropdown(true)}>
-            <Search size={20} />
-          </Button> */}
+          {}
           {showDropdown && (
             <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40" onClick={() => setShowDropdown(false)}>
               <div className="bg-default-100 rounded-xl shadow-xl mt-24 w-[95vw] max-w-md p-4 relative" onClick={e => e.stopPropagation()}>

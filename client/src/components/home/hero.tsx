@@ -7,7 +7,7 @@ function Hero() {
   const { user, loading } = useAuth();
   return (    
     <section className="relative py-16 lg:py-20">
-      {/* Glow background: خفيف جدًا */}
+      {}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] bg-gradient-to-br from-primary-400/10 to-blue-400/10 blur-lg opacity-70 -z-10"></div>
       <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
@@ -97,7 +97,7 @@ function Hero() {
           
           {}
           <div className="flex-1 hidden lg:block relative">
-            {/* خفف الخلفية الجانبية أيضًا */}
+            {}
             <div className="absolute -inset-1 bg-gradient-to-r from-primary-400/10 to-blue-400/10 rounded-3xl blur-md opacity-60 -z-10"></div>
             <div className="relative border-1 border-default-200/50 dark:border-default-100/20 bg-default-50/50 dark:bg-default-900/50 backdrop-blur-sm rounded-2xl p-1 shadow-xl">
               <img 

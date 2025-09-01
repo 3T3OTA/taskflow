@@ -1,5 +1,4 @@
 import { Card, CardBody, CardFooter } from "@heroui/react";
-// import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 interface BoardType {
@@ -34,7 +33,6 @@ function BoardSkeletonGrid() {
 }
 
 function BoardsCards({ boards, isLoading }: { boards: BoardType[]; isLoading: boolean }) {
-  // const navigate = useNavigate();
 
   return (
     <div className="space-y-6">
@@ -53,7 +51,6 @@ function BoardsCards({ boards, isLoading }: { boards: BoardType[]; isLoading: bo
                 key={board.id}
                 className="transition-colors duration-300"
                 isPressable
-                // onClick={() => navigate(`/boards/${board.id}`)}
 
               >
               <Link to={`/boards/${board.id}`} key={board.id}>

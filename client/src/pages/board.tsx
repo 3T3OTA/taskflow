@@ -14,7 +14,6 @@ export default function BoardPage() {
   const [error, setError] = useState<string | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  // const [boards, setBoards] = useState([]);
 
   const fetchBoard = useCallback(async () => {
     setLoading(true);
@@ -33,9 +32,7 @@ export default function BoardPage() {
   const fetchBoards = useCallback(async () => {
     try {
       await getBoards();
-      // setBoards(data);
     } catch (error) {
-      // ignore
     }
   }, []);
 
