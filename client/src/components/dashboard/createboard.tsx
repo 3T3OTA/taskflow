@@ -20,11 +20,11 @@ function CreateBoard({ isOpen, onOpenChange, onBoardCreated }: { isOpen: boolean
             addToast({ title: `Board "${title}" created successfully!`, color: "success" });
             setTitle("");
             onOpenChange(false);
-            navigate("/dashboard");
+            navigate("/u/boards");
             if (onBoardCreated) onBoardCreated();
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error creating board:", error);
-            addToast({ title: "Failed to create board. Please try again.", color: "danger" });
+            addToast({ title: error?.message || error?.error || "Failed to create board", color: "danger" });
         }
     };
   return (

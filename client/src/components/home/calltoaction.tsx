@@ -7,11 +7,11 @@ function CallToAction() {
   return (
     <section className="relative py-16">
       {}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-br from-primary-600/20 to-purple-500/10 blur-[150px] -z-10"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[400px] bg-gradient-to-br from-primary-600/20 to-purple-500/10 blur-[150px] -z-10"></div>
       <div className="absolute -bottom-10 right-0 w-40 h-40 bg-gradient-to-tr from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl -z-10"></div>
       
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-        <Card className="border-1 border-default-200 dark:border-default-100/20 overflow-hidden">
+        <Card className="border-1 border-default-200 dark:border-default-100/20 overflow-hidden dark:bg-gray-900">
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary-500/60 to-transparent"></div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

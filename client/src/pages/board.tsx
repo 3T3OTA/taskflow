@@ -6,6 +6,7 @@ import { Button } from "@heroui/react";
 import { Settings } from "lucide-react";
 import List from "@/components/dashboard/list";
 import EditBoardModal from "@/components/dashboard/editboardmodal";
+import NotAuthorized from "@/components/dashboard/notauthorized";
 
 export default function BoardPage() {
   const { id } = useParams();
@@ -23,7 +24,7 @@ export default function BoardPage() {
         const fetchedBoard = await getBoardById(id);
         setBoard(fetchedBoard);
       } catch (err: any) {
-        setError(err?.error || "Something went wrong");
+        setError(err?.message || "Something went wrong");
       }
     }
     setLoading(false);
@@ -49,7 +50,7 @@ export default function BoardPage() {
         fetchBoard();
       }}
     >
-      <div className="p-8">
+      <div className="p-8 select-none" style={{ userSelect: "none", WebkitUserSelect: "none", MozUserSelect: "none", msUserSelect: "none" }}>
         {loading ? (
           <div className="flex flex-row gap-4 overflow-x-auto p-2">
             <div className="w-72 min-w-[280px] shadow-xl bg-default-100 flex-shrink-0 rounded-xl animate-pulse ">
@@ -70,7 +71,7 @@ export default function BoardPage() {
             </div>
           </div>
         ) : error ? (
-          <div className="text-danger-500 font-bold">{error}</div>
+          <NotAuthorized message={error} />
         ) : (
           <>
             <div className="flex items-center gap-2 mb-4">

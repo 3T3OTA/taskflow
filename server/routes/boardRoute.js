@@ -3,14 +3,14 @@ import express from "express";
 const router = express.Router();
 import authDecode from "../middlewares/authDecode.js";
 import authorizeBoardOwner from "../middlewares/authorizeBoardOwner.js";
-import upload from "../utils/upload.js";
+import uploadBoard from "../utils/uploadBoard.js";
 
 
 
 router.get("/me", authDecode, boardController.getBoardsByUserId);
 router.get("/me/:id", authDecode, authorizeBoardOwner, boardController.getBoardById);
 router.post("/create", authDecode, boardController.createBoard);
-router.put("/:id/update", authDecode, authorizeBoardOwner, upload.single("image"), boardController.updateBoard);
+router.put("/:id/update", authDecode, authorizeBoardOwner, uploadBoard.single("image"), boardController.updateBoard);
 router.delete("/:id/delete", authDecode, authorizeBoardOwner, boardController.deleteBoard);
 
 router.post("/:id/list/add", authDecode, authorizeBoardOwner, boardController.addListsToBoard);

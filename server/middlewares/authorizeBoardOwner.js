@@ -11,7 +11,7 @@ const authorizeBoardOwner = async (req, res, next) => {
       return res.status(404).json({ message: 'Board not found' });
     }
     if (board.userId.toString() !== req.user.id && board.userId.toString() !== req.user._id) {
-      return res.status(403).json({ message: 'You are not authorized to access this board' });
+      return res.status(403).json({ message: 'You are not authorized to access this board. Please contact your administrator for access.' });
     }
     next();
   } catch (error) {

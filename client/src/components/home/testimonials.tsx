@@ -245,7 +245,8 @@ function Testimonials() {
       clearTimeout(resizeTimer);
     };
   }, [cardWidth]);
-    return (    <section className="relative py-12 sm:py-16 overflow-hidden">
+    return (    
+    <section className="relative py-12 sm:py-16 overflow-hidden" style={{ userSelect: "none", WebkitUserSelect: "none", MozUserSelect: "none", msUserSelect: "none" }}>
       {}
       {}
       {}
@@ -320,7 +321,8 @@ function Testimonials() {
                   )}
                 </div>
               )}
-              {[...testimonials, ...testimonials.slice(0, 3)].map((testimonial, index) => (                <motion.div
+              {[...testimonials, ...testimonials.slice(0, 3)].map((testimonial, index) => (                
+                <motion.div
                   key={index}
                   initial={{ x: direction > 0 ? 100 : -100, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
@@ -333,7 +335,7 @@ function Testimonials() {
                   className="px-1.5 sm:px-2 box-border"
                   style={{ minWidth: `${cardWidth}%` }}
                 >                  <div className="h-full px-1">
-                    <Card className="border-1 border-default-200 dark:border-default-100/20 shadow-md h-full overflow-hidden transition-all duration-300 hover:shadow-lg">
+                    <Card className="border-1 border-default-200 dark:border-default-100/20 shadow-md h-full overflow-hidden transition-all duration-300 hover:shadow-lg dark:bg-gray-900">
                       {}
                       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary-500/60 to-transparent"></div>
                       

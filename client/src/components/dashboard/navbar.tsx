@@ -5,6 +5,9 @@ import { Search } from "lucide-react";
 import CreateBoard from "@/components/dashboard/createboard";
 import { useNavigate } from "react-router-dom";
 import { getBoards } from "@/services/api";
+import {useAuth} from '@/context/AuthContext'
+import Cookies from "js-cookie";
+import { siteConfig } from "@/config/site";
 
 function NavbarDashboard({ isCreateOpen, setIsCreateOpen, onBoardCreated }: { isCreateOpen?: boolean, setIsCreateOpen?: (open: boolean) => void, onBoardCreated?: (board?: any) => void }) {
   const navigate = useNavigate();
@@ -27,6 +30,14 @@ function NavbarDashboard({ isCreateOpen, setIsCreateOpen, onBoardCreated }: { is
     setFiltered(f);
     setShowDropdown(f.length > 0);
   }, [search, boards]);
+
+  const { user } = useAuth();
+
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    window.location.reload();
+  }
 
   return (
     <Navbar isBordered className="bg-default-50" maxWidth="xl">
@@ -141,23 +152,24 @@ function NavbarDashboard({ isCreateOpen, setIsCreateOpen, onBoardCreated }: { is
               as="button"
               className="transition-transform"
               color="primary"
-              name="Jason Hughes"
+              name={user?.name}
               size="sm"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              src={user?.profile_picture}
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+              <p className="font-semibold">{user?.email}</p>
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
+            <>
+              {siteConfig.sidebar.map((item) => (
+                <DropdownItem key={item.href} onPress={() => navigate(item.href)}>
+                  {item.label}
+                </DropdownItem>
+              ))}
+            </>
+            <DropdownItem key="logout" color="danger" onPress={handleLogout}>
               Log Out
             </DropdownItem>
           </DropdownMenu>

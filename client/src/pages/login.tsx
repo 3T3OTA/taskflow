@@ -42,7 +42,7 @@ export default function LoginPage() {
   return (
     <DefaultLayout>
       <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
-        <Card className="w-full max-w-md shadow-lg">
+        <Card className="w-full max-w-md shadow-lg dark:bg-gray-900">
           <CardHeader className="flex flex-col gap-2 text-center">
             <h1 className="text-3xl font-bold">Welcome back</h1>
             <p className="text-muted-foreground text-balance">
@@ -66,6 +66,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                color="primary"
               />
               <Input
                 isRequired
@@ -77,6 +78,7 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                color="primary"
               />
               <div className="flex justify-end">
                 <a href="/forgot-password" className="text-sm text-primary hover:underline">

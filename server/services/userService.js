@@ -52,11 +52,21 @@ class UserService {
 
     async updateUser(userId, updateData) {
       try {
-        const user = await User.findByIdAndUpdate(userId, updateData, { new: true });
+        const user = await User.findById(userId);
         if (!user) {
           return { success: false, message: "User not found" };
         }
-        return { success: true, user };
+
+        if (updateData.password) {
+          const hashedPassword = await hashPassword(updateData.password);
+          updateData.password = hashedPassword;
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
+        if (!updatedUser) {
+          return { success: false, message: "User not found" };
+        }
+        return { success: true, user: updatedUser };
       } catch (error) {
         return { success: false, message: `Error updating user: ${error.message}` };
       }
@@ -80,12 +90,14 @@ class UserService {
             if (!user) {
                 throw new Error('User not found');
             }
+
             return { success: true, user };
         } catch (error) {
             return { success: false, message: `Error fetching user profile: ${error.message}` };
         }
     }
 
+    
 };
 
 export default new UserService();

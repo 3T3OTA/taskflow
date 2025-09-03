@@ -8,18 +8,17 @@ function Hero() {
   return (    
     <section className="relative py-16 lg:py-20">
       {}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] bg-gradient-to-br from-primary-400/10 to-blue-400/10 blur-lg opacity-70 -z-10"></div>
       <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
           {}
           <div className="flex-1 text-center lg:text-left max-w-xl backdrop-blur-sm p-6 rounded-xl relative">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary-500/60 to-transparent"></div>
             <Chip color="primary" variant="flat" className="border border-primary-600/50 mb-5" >New: Our Memberships Subscription</Chip>
             
             <h1 className={title({ size: "lg", className: "inline-block" })}>
               { heroData.title } 
               <span className="text-primary"> { heroData.spantitle }</span>
-            </h1>            <p className="mt-5 text-base text-pretty text-default-500 sm:text-lg/relaxed">{ heroData.subtitle }</p>
+            </h1>
+            <p className="mt-5 text-base text-pretty text-default-500 sm:text-lg/relaxed">{ heroData.subtitle }</p>
             
             <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-4">
               {}
@@ -98,7 +97,6 @@ function Hero() {
           {}
           <div className="flex-1 hidden lg:block relative">
             {}
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary-400/10 to-blue-400/10 rounded-3xl blur-md opacity-60 -z-10"></div>
             <div className="relative border-1 border-default-200/50 dark:border-default-100/20 bg-default-50/50 dark:bg-default-900/50 backdrop-blur-sm rounded-2xl p-1 shadow-xl">
               <img 
                 src="https://i.ibb.co/TMLr6m7J/bg11.png" 

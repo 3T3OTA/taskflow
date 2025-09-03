@@ -16,7 +16,8 @@ function HowItWorks() {
             {howItWorksData.subtitle}
           </p>
         </div>
-        <div className="flex flex-col items-center max-w-md mx-auto mt-8 lg:mt-20 lg:flex-row lg:max-w-none gap-4">          {howItWorksData.steps.map((step, index) => (
+        <div className="flex flex-col items-center max-w-md mx-auto mt-8 lg:mt-20 lg:flex-row lg:max-w-none gap-4">          
+          {howItWorksData.steps.map((step, index) => (
             <React.Fragment key={`step-${index}`}>
               {}
               <div className={`relative flex-1 w-full ${index > 0 ? "mt-8 lg:mt-0" : ""}`}>
@@ -32,7 +33,7 @@ function HowItWorks() {
                     />
                   </div>
                 )}
-                <Card className={`${index === 1 ? "relative" : ""} border-1 border-default-200 dark:border-default-100/20 shadow-lg`}>
+                <Card className={`${index === 1 ? "relative" : ""} border-1 border-default-200 dark:border-default-100/20 shadow-lg dark:bg-gray-900`}>
                   <CardHeader className="pb-0 pt-6 px-6 flex items-center gap-2">
                     <div className={`inline-flex items-center justify-center w-10 h-10 text-base font-bold text-white rounded-xl ${
                       step.color === 'primary' ? 'bg-primary' : 

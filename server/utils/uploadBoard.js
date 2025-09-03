@@ -2,7 +2,7 @@ import multer from 'multer';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, 'uploads/boards/');
   },
 filename: (req, file, cb) => {
   const ext = file.originalname.split('.').pop();
@@ -10,6 +10,6 @@ filename: (req, file, cb) => {
   cb(null, boardId + '-' + Date.now() + '.' + ext);
 },
 });
-const upload = multer({ storage: storage });
+const uploadBoard = multer({ storage: storage });
 
-export default upload;
+export default uploadBoard;

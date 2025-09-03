@@ -6,8 +6,8 @@ import { GithubIcon, TwitterIcon } from "@/components/icons";
 
 export const Footer = () => {
   return (
-    <footer className="w-full dark:bg-[#000914] border-t border-primary-600/50">
-      <Card className="border-none rounded-none bg-content1/5 dark:bg-content1/10 shadow-none">
+    <footer className="w-full ">
+      <Card className="border-none rounded-none dark:bg-gray-900 shadow-none">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="flex justify-center">
             <Logo className="text-primary h-12 w-12" />

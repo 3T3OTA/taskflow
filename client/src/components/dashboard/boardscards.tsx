@@ -53,7 +53,7 @@ function BoardsCards({ boards, isLoading }: { boards: BoardType[]; isLoading: bo
                 isPressable
 
               >
-              <Link to={`/boards/${board.id}`} key={board.id}>
+              <Link to={`/u/boards/${board.id}`} key={board.id}>
                 <CardBody className="p-0 overflow-hidden">
                   <img
                     src={board.image}
@@ -62,7 +62,7 @@ function BoardsCards({ boards, isLoading }: { boards: BoardType[]; isLoading: bo
                   />
                 </CardBody>
                 <CardFooter className="flex justify-between items-center">
-                  <p className="text-white text-sm">{board.title}</p>
+                  <p className="text-sm">{board.title}</p>
                 </CardFooter>
               </Link>
               </Card>

@@ -60,7 +60,7 @@ const EditBoardModal: React.FC<EditBoardModalProps> = ({ isOpen, onOpenChange, b
       await deleteBoard(board.id);
       addToast({ title: "Board deleted successfully!", color: "success" });
       onOpenChange(false);
-      navigate("/dashboard");
+      navigate("/u/boards");
     } catch (err) {
       addToast({ title: "Failed to delete board.", color: "danger" });
     } finally {

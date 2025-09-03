@@ -5,7 +5,7 @@ export const heroData = {
   subtitle: "TaskFlow Pro lets you create unlimited boards, customize lists, and organize tasks your way. Sign up, log in, and manage all your projects from one clean, intuitive dashboard.",
   ctaPrimary: {
     label: "Dashboard",
-    href: "/dashboard",
+    href: "/u/boards",
     variant: "shadow",
     size: "lg",
   },

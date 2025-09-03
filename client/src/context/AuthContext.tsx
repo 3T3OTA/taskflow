@@ -4,7 +4,9 @@ import { getCurrentUser } from "../services/api";
 import Cookies from 'js-cookie';
 interface User {
   id: string;
-  username: string;
+  name: string;
+  email: string;
+  profile_picture: string;
 }
 
 interface AuthContextType {

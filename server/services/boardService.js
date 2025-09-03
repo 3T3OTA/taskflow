@@ -6,6 +6,14 @@ class BoardService {
   async createBoard(boardData) {
     try {
       const board = new Board(boardData);
+
+      const userId = boardData.userId;
+
+      const boardCount = await Board.countDocuments({ userId });
+      if (boardCount >= 10) {
+        return { success: false, message: "Maximum board limit reached" };
+      }
+
       const savedBoard = await board.save();
       return { success: true, board: savedBoard };
     } catch (error) {

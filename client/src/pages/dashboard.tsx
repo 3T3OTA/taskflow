@@ -34,7 +34,9 @@ export default function DashboardPage() {
     >
       <div className="flex items-center space-x-2 px-4 mt-4 mb-5">
         <SquareLibrary />
-        <h2 className="text-lg font-semibold">My Boards</h2>
+        <h2 className="text-lg font-semibold">
+          My Boards <span className="text-gray-500 text-base">({boards.length}/10)</span>
+        </h2>
         <Button className="ml-auto" color="primary" variant="solid" onClick={() => setIsCreateOpen(true)}>
           + New Board
         </Button>

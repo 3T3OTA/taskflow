@@ -56,4 +56,16 @@ export const siteConfig = {
     discord: "https://discord.gg/9b6yyZKmH4",
     sponsor: "https://patreon.com/jrgarciadev",
   },
+  sidebar: [
+    {
+      label: "Boards",
+      href: "/u/boards",
+      icon: "boards",
+    },
+    {
+      label: "Account",
+      href: "/u/profile",
+      icon: "user",
+    },
+  ]
 };

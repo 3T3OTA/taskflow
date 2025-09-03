@@ -1,8 +1,10 @@
 import boardService from "../services/boardService.js";
 
+const uploadBoardPath = '/uploads/boards/';
+
 class BoardController {
   async createBoard(req, res) {
-    const boardData = req.body;
+    const boardData = req.body;    
     if (!boardData.title) {
       return res.status(400).json({ error: "Title is required" });
     }
@@ -24,7 +26,7 @@ class BoardController {
     if (result.success) {
       result.boards = result.boards.map((board) => {
         if (board.image && !board.image.includes('placehold.co')) {
-          board.image = req.protocol + '://' + req.get('host') + '/uploads/' + board.image;
+          board.image = req.protocol + '://' + req.get('host') + uploadBoardPath + board.image;
         }
         return board;
       });
@@ -47,7 +49,7 @@ class BoardController {
     if (result.success) {
       if (result.board.image && !result.board.image.includes('placehold.co')) {
         result.board.image =
-          req.protocol + "://" + req.get("host") + "/uploads/" + result.board.image;
+          req.protocol + "://" + req.get("host") + uploadBoardPath + result.board.image;
       }
       return res.status(200).json(result.board);
     }
@@ -76,7 +78,7 @@ class BoardController {
     const result = await boardService.getBoardById(boardId, userId);
     if (result.success) {
         if (result.board.image && !result.board.image.includes('placehold.co')) {
-          result.board.image = req.protocol + '://' + req.get('host') + '/uploads/' + result.board.image;
+          result.board.image = req.protocol + '://' + req.get('host') + uploadBoardPath + result.board.image;
         }
       return res.status(200).json(result.board);
     }

@@ -27,7 +27,7 @@ import { useAuth } from "@/context/AuthContext";
 
 
 const buttonLink = "/login";
-const buttonDashboard = "/dashboard";
+const buttonDashboard = "/u/boards";
 
 export const Navbar = () => {
 
@@ -40,7 +40,7 @@ export const Navbar = () => {
 const { user, loading } = useAuth();
 
   return (
-    <HeroUINavbar shouldHideOnScroll isBordered className="dark:bg-[#000914]/70 border-primary-600/50" maxWidth="xl" >
+    <HeroUINavbar shouldHideOnScroll isBordered className="dark:bg-gray-900/80" maxWidth="xl" >
         <NavbarBrand className="gap-3 max-w-fit">
           <Link
             className="flex justify-start items-center gap-1"

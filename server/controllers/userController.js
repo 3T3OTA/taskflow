@@ -1,4 +1,7 @@
 import userService from '../services/userService.js';
+
+const uploadProfilePath = '/uploads/profiles/';
+
 class UserController {
 
 async createUser(req, res) {
@@ -34,13 +37,23 @@ async getUserById(req, res) {
 }
 
 async updateUser(req, res) {
-  const result = await userService.updateUser(req.params.id, req.body);
-  
-  if (!result.success) {
-    return res.status(404).json({ message: result.message });
+  const userId = req.user.id;
+  const updateData = req.body;
+
+  if (req.file) {
+    updateData.profile_picture = req.file.filename; 
   }
-  
-  res.status(200).json(result.user);
+  const result = await userService.updateUser(userId, updateData);
+
+  if (result.success) {
+    if (result.user.profile_picture && !result.user.profile_picture.includes('i.ibb.co')) {
+      result.user.profile_picture =
+        req.protocol + "://" + req.get("host") + uploadProfilePath + result.user.profile_picture;
+    }
+    res.status(200).json(result.user);
+    return;
+  }
+  return res.status(404).json({ message: result.message });
 }
 
 async deleteUser(req, res) {
@@ -59,6 +72,11 @@ async getCurrentUser(req, res) {
   
   if (!result.success) {
     return res.status(404).json({ message: result.message });
+  }
+
+  if (result.user.profile_picture && !result.user.profile_picture.includes('i.ibb.co')) {
+    result.user.profile_picture =
+      req.protocol + "://" + req.get("host") + uploadProfilePath + result.user.profile_picture;
   }
 
   res.status(200).json({ user: result.user });
