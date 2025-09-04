@@ -1,5 +1,6 @@
 node_modules
-uploads/*
-!uploads/.gitkeep
-!uploads/profiles/.gitkeep
-!uploads/boards/.gitkeep
+# uploads/*
+!uploads/profiles/
+!uploads/boards/
+uploads/profiles/*
+uploads/boards/*
