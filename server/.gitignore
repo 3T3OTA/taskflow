@@ -1,6 +1,6 @@
 node_modules
 # uploads/*
-!uploads/profiles/
-!uploads/boards/
+# !uploads/profiles/
+# !uploads/boards/
 uploads/profiles/*
 uploads/boards/*
