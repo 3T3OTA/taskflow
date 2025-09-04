@@ -1,10 +1,5 @@
 node_modules
 
-uploads/client/*
-!uploads/client/.gitkeep
-
-uploads/server/*
-!uploads/server/.gitkeep
 
 uploads/boards/*
 !uploads/boards/.gitkeep
