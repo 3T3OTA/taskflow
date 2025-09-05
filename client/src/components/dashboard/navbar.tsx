@@ -76,7 +76,7 @@ function NavbarDashboard({ isCreateOpen, setIsCreateOpen, onBoardCreated }: { is
                   <div
                     key={b.id}
                     className="p-3 cursor-pointer hover:bg-default-200/30 text-default-700 flex items-center"
-                    onMouseDown={() => { navigate(`/boards/${b.id}`); setShowDropdown(false); setSearch(""); }}
+                    onMouseDown={() => { navigate(`/u/boards/${b.id}`); setShowDropdown(false); setSearch(""); }}
                   >
                     <img src={b.image} alt={b.title} className="w-6 h-6 rounded-md mr-2" />
                     {b.title}
@@ -121,7 +121,7 @@ function NavbarDashboard({ isCreateOpen, setIsCreateOpen, onBoardCreated }: { is
                       <div
                         key={b.id}
                         className="p-3 cursor-pointer hover:bg-default-200/30 text-default-700 flex items-center rounded-lg"
-                        onMouseDown={() => { navigate(`/boards/${b.id}`); setShowDropdown(false); setSearch(""); }}
+                        onMouseDown={() => { navigate(`/u/boards/${b.id}`); setShowDropdown(false); setSearch(""); }}
                       >
                         <img src={b.image} alt={b.title} className="w-6 h-6 rounded-md mr-2" />
                         {b.title}
@@ -178,7 +178,7 @@ function NavbarDashboard({ isCreateOpen, setIsCreateOpen, onBoardCreated }: { is
       <CreateBoard isOpen={!!isCreateOpen} onOpenChange={setIsCreateOpen || (() => {})} onBoardCreated={(board) => {
         if (typeof onBoardCreated === 'function') onBoardCreated(board);
         if (board && board.id) {
-          navigate(`/boards/${board.id}`);
+          navigate(`/u/boards/${board.id}`);
         }
       }} />
     </Navbar>
