@@ -8,6 +8,7 @@ import { Card, CardHeader, CardBody } from "@heroui/card";
 import { Input } from "@heroui/input";
 import { Form } from "@heroui/form";
 import { addToast } from "@heroui/react";
+import { SEO, pageSEO } from "@/components/SEO";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -40,6 +41,7 @@ export default function RegisterPage() {
 
   return (
     <DefaultLayout>
+      <SEO {...pageSEO.register} />
       <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
         <Card className="w-full max-w-md shadow-lg dark:bg-gray-900">
           <CardHeader className="flex flex-col gap-2 text-center">

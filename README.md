@@ -67,8 +67,4 @@ TaskFlow is a modern, full-stack task and project management platform designed f
 ## License
 This project is licensed under the MIT License.
 
----
-
-© 2025 SkyRazur. All rights reserved.
-
 For more details, see the `client/README.md` and `server/` documentation.

@@ -15,6 +15,7 @@ import { ProfileImageUpload } from "@/components/profile/profile-image-upload";
 import { updateProfile } from "@/services/api";
 import { useAuth } from "@/context/AuthContext";
 import { UserRound } from "lucide-react";
+import { SEO, pageSEO } from "@/components/SEO";
 
 function Profile() {
   const { user, refreshAuth } = useAuth();
@@ -113,6 +114,7 @@ function Profile() {
       isCreateOpen={isCreateOpen}
       setIsCreateOpen={setIsCreateOpen}
     >
+      <SEO {...pageSEO.profile} />
       <div className="flex items-center space-x-2 px-4 mt-4 mb-5">
         <UserRound />
         <h2 className="text-lg font-semibold">My Profile</h2>

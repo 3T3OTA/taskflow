@@ -4,6 +4,7 @@ import BoardsCards from "@/components/dashboard/boardscards";
 import { getBoards } from "@/services/api";
 import { SquareLibrary } from "lucide-react";
 import { Button } from "@heroui/react";
+import { SEO, pageSEO } from "@/components/SEO";
 
 export default function DashboardPage() {
   const [boards, setBoards] = useState([]);
@@ -32,6 +33,7 @@ export default function DashboardPage() {
       setIsCreateOpen={setIsCreateOpen}
       onBoardCreated={fetchBoards}
     >
+      <SEO {...pageSEO.dashboard} />
       <div className="flex items-center space-x-2 px-4 mt-4 mb-5">
         <SquareLibrary />
         <h2 className="text-lg font-semibold">

@@ -7,6 +7,7 @@ import { Settings } from "lucide-react";
 import List from "@/components/dashboard/list";
 import EditBoardModal from "@/components/dashboard/editboardmodal";
 import NotAuthorized from "@/components/dashboard/notauthorized";
+import { SEO } from "@/components/SEO";
 
 export default function BoardPage() {
   const { id } = useParams();
@@ -50,6 +51,12 @@ export default function BoardPage() {
         fetchBoard();
       }}
     >
+      <SEO
+        title={board?.title || 'Board'}
+        description={`Manage tasks in ${board?.title || 'your board'}`}
+        keywords={['kanban board', 'task management', board?.title]}
+        noindex={true}
+      />
       <div className="p-8 select-none" style={{ userSelect: "none", WebkitUserSelect: "none", MozUserSelect: "none", msUserSelect: "none" }}>
         {loading ? (
           <div className="flex flex-row gap-4 overflow-x-auto p-2">
