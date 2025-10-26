@@ -6,3 +6,5 @@ uploads/boards/*
 
 uploads/profiles/*
 !uploads/profiles/.gitkeep
+
+.env
