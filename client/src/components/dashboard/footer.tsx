@@ -1,5 +1,3 @@
-import { Link } from "@heroui/link";
-
 function Footer() {
   return (
     <footer className="bg-default-50 py-4">
