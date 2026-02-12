@@ -42,75 +42,125 @@ export default function RegisterPage() {
   return (
     <DefaultLayout>
       <SEO {...pageSEO.register} />
-      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
-        <Card className="w-full max-w-md shadow-lg dark:bg-gray-900">
-          <CardHeader className="flex flex-col gap-2 text-center">
-            <h1 className="text-3xl font-bold">Join us today</h1>
-            <p className="text-muted-foreground text-balance">
-              Create your TaskFlow Inc account and start your journey
-            </p>
-          </CardHeader>
-          <CardBody>
-            {error && (
-              <div className="bg-danger-50 text-danger border border-danger-200 rounded-md p-3 mb-4">
-                {error}
-              </div>
-            )}
-            <Form className="flex flex-col gap-4" onSubmit={handleRegister}>
-              <Input
-                isRequired
-                errorMessage="Please enter a valid name"
-                label="Name"
-                labelPlacement="outside"
-                name="name"
-                placeholder="Enter your name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                color="primary"
-              />
-              <Input
-                isRequired
-                errorMessage="Please enter a valid email"
-                label="Email"
-                labelPlacement="outside"
-                name="email"
-                placeholder="Enter your email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                color="primary"
-              />
-              <Input
-                isRequired
-                errorMessage="Please enter a valid password"
-                label="Password"
-                labelPlacement="outside"
-                name="password"
-                placeholder="Enter your password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                color="primary"
-              />
-              <Button 
-                type="submit" 
-                color="primary"
-                className="w-full mt-2"
-                disabled={isLoading}
-              >
-                {isLoading ? (
+      <div className="relative min-h-[calc(100vh-200px)] overflow-hidden bg-[#f6f1e8] dark:bg-[#0b0f14]">
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(20,20,20,0.06)_1px,transparent_1px),linear-gradient(60deg,rgba(20,20,20,0.04)_1px,transparent_1px)] [background-size:48px_48px] opacity-40 dark:bg-[linear-gradient(120deg,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(60deg,rgba(255,255,255,0.06)_1px,transparent_1px)] dark:opacity-20" />
+        <div className="absolute -top-24 -left-20 h-72 w-72 rounded-full bg-[rgba(59,130,246,0.25)] blur-3xl dark:bg-[rgba(59,130,246,0.18)]" />
+        <div className="absolute -bottom-28 -right-10 h-80 w-80 rounded-full bg-[rgba(14,165,233,0.25)] blur-3xl dark:bg-[rgba(14,165,233,0.18)]" />
+        <div className="relative mx-auto flex w-full max-w-5xl items-center justify-center px-4 py-12">
+          <Card className="w-full overflow-hidden border border-black/10 bg-white/90 shadow-[0_30px_70px_rgba(20,20,20,0.15)] backdrop-blur-md dark:border-white/10 dark:bg-[#0f151c]/90 dark:shadow-[0_30px_70px_rgba(0,0,0,0.45)]">
+            <div className="grid gap-0 md:grid-cols-[1.1fr_1fr]">
+              <div className="hidden md:flex flex-col justify-between gap-8 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.25)_0%,rgba(255,255,255,0)_55%)] p-10 dark:bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.25)_0%,rgba(0,0,0,0)_60%)]">
+                <div className="space-y-4">
+                  <span className="inline-flex items-center justify-center rounded-full bg-black/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#141414] dark:bg-white/10 dark:text-white/80">
+                    TaskFlow
+                  </span>
+                  <h1 className="text-4xl font-semibold leading-tight text-[#141414] dark:text-white">
+                    Create your space for focused work.
+                  </h1>
+                  <p className="text-base text-black/60 dark:text-white/60">
+                    Start organizing projects, tasks, and ideas in a board built for momentum.
+                  </p>
+                </div>
+                <div className="space-y-3 text-sm text-black/60 dark:text-white/60">
                   <div className="flex items-center gap-2">
-                    <span className="animate-spin">⟳</span> Logging in...
+                    <span className="h-2 w-2 rounded-full bg-blue-500 dark:bg-blue-400" />
+                    Capture tasks in seconds.
                   </div>
-                ) : "Login"}
-              </Button>
-              <p className="text-center mt-4 text-sm">
-                Already have an account? <Link to="/login" className="text-primary font-medium hover:underline">Login</Link>
-              </p>
-            </Form>
-          </CardBody>
-        </Card>
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-blue-500 dark:bg-blue-400" />
+                    Share boards with your team.
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-blue-500 dark:bg-blue-400" />
+                    Keep priorities visible.
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 sm:p-10">
+                <CardHeader className="flex flex-col gap-2 px-0 pt-0 text-left">
+                  <h2 className="text-3xl font-semibold text-[#141414] dark:text-white">Create account</h2>
+                  <p className="text-sm text-black/60 dark:text-white/60">
+                    It only takes a minute to get started.
+                  </p>
+                </CardHeader>
+                <CardBody className="px-0">
+                  {error && (
+                    <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-400/40 dark:bg-red-500/15 dark:text-red-200">
+                      {error}
+                    </div>
+                  )}
+                  <Form className="flex flex-col gap-4" onSubmit={handleRegister}>
+                    <Input
+                      isRequired
+                      errorMessage="Please enter a valid name"
+                      label="Name"
+                      labelPlacement="outside"
+                      name="name"
+                      placeholder="Enter your name"
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      color="primary"
+                      classNames={{
+                        label: "text-black/70 dark:text-white/70",
+                        inputWrapper: "bg-white/70 border border-black/10 shadow-none hover:bg-white/90 focus-within:border-blue-500 dark:bg-white/5 dark:border-white/10",
+                        input: "text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/40",
+                      }}
+                    />
+                    <Input
+                      isRequired
+                      errorMessage="Please enter a valid email"
+                      label="Email"
+                      labelPlacement="outside"
+                      name="email"
+                      placeholder="name@company.com"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      color="primary"
+                      classNames={{
+                        label: "text-black/70 dark:text-white/70",
+                        inputWrapper: "bg-white/70 border border-black/10 shadow-none hover:bg-white/90 focus-within:border-blue-500 dark:bg-white/5 dark:border-white/10",
+                        input: "text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/40",
+                      }}
+                    />
+                    <Input
+                      isRequired
+                      errorMessage="Please enter a valid password"
+                      label="Password"
+                      labelPlacement="outside"
+                      name="password"
+                      placeholder="Create a strong password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      color="primary"
+                      classNames={{
+                        label: "text-black/70 dark:text-white/70",
+                        inputWrapper: "bg-white/70 border border-black/10 shadow-none hover:bg-white/90 focus-within:border-blue-500 dark:bg-white/5 dark:border-white/10",
+                        input: "text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/40",
+                      }}
+                    />
+                    <Button
+                      type="submit"
+                      className="w-full bg-blue-600 text-white font-semibold transition hover:bg-blue-500 hover:shadow-[0_12px_24px_rgba(37,99,235,0.35)] dark:bg-blue-500 dark:hover:bg-blue-400 dark:hover:shadow-[0_12px_24px_rgba(59,130,246,0.35)]"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <div className="flex items-center gap-2">
+                          <span className="animate-spin">⟳</span> Creating account...
+                        </div>
+                      ) : "Create account"}
+                    </Button>
+                    <p className="text-center text-sm text-black/60 dark:text-white/60">
+                      Already have an account? <Link to="/login" className="text-blue-600 font-semibold hover:underline dark:text-blue-300">Sign in</Link>
+                    </p>
+                  </Form>
+                </CardBody>
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
     </DefaultLayout>
   );
