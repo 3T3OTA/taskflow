@@ -125,12 +125,6 @@ export default function LoginPage() {
                         input: "text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/40",
                       }}
                     />
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-black/60 dark:text-white/60">Keep me signed in</span>
-                      <a href="/forgot-password" className="text-blue-600 font-semibold hover:underline dark:text-blue-300">
-                        Forgot password?
-                      </a>
-                    </div>
                     <Button
                       type="submit"
                       className="w-full bg-blue-600 text-white font-semibold transition hover:bg-blue-500 hover:shadow-[0_12px_24px_rgba(37,99,235,0.35)] dark:bg-blue-500 dark:hover:bg-blue-400 dark:hover:shadow-[0_12px_24px_rgba(59,130,246,0.35)]"
