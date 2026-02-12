@@ -127,7 +127,7 @@ export default function LoginPage() {
                     />
                     <Button
                       type="submit"
-                      className="w-full bg-blue-600 text-white font-semibold transition hover:bg-blue-500 hover:shadow-[0_12px_24px_rgba(37,99,235,0.35)] dark:bg-blue-500 dark:hover:bg-blue-400 dark:hover:shadow-[0_12px_24px_rgba(59,130,246,0.35)]"
+                      className="w-full bg-blue-600 text-white font-semibold transition hover:bg-blue-500  dark:bg-blue-500 dark:hover:bg-blue-400 "
                       disabled={isLoading}
                     >
                       {isLoading ? (
