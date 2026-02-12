@@ -33,7 +33,17 @@ export const Footer = () => {
           </ul>
           
           <div className="mt-8 text-center text-sm text-default-400">
-            <p>&copy; {new Date().getFullYear()}. All rights reserved. Developed By <Link href="https://3t3ota.me" isExternal className="text-blue-500 transition-colors hover:text-primary">3t3ota</Link></p>
+            <p>
+              &copy; {new Date().getFullYear()}. All rights reserved. Developed By{" "}
+              <a
+                href="https://3t3ota.me"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 transition-colors hover:text-primary"
+              >
+                3t3ota
+              </a>
+            </p>
           </div>
         </div>
       </Card>
